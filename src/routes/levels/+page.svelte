@@ -119,7 +119,7 @@
 </script>
 
 <svelte:head>
-    <title>levels - score.gd</title>
+    <title>levels - loggd</title>
 </svelte:head>
 
 {#snippet filterDropdown(
