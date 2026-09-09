@@ -5,24 +5,24 @@ import { getCurrentDay } from "$lib/server/utils";
 import winston from "winston";
 
 export const load: LayoutServerLoad = async (event) => {
-  try {
-    const vault = (await db.findVault(getCurrentDay())).map((d) => d.day);
+    try {
+        // const vault = (await db.findVault(getCurrentDay())).map((d) => d.day);
 
-    const {
-      data: { user },
-    } = await event.locals.supabase.auth.getUser();
+        const {
+            data: { user },
+        } = await event.locals.supabase.auth.getUser();
 
-    if (!user) return { vault, user: null };
+        if (!user) return { user: null };
 
-    // Get full user data from database
-    const profile = await db.findUserById(user.id);
-    if (!profile?.username && event.url.pathname !== "/profile/setup") {
-      redirect(303, "/profile/setup");
+        // Get full user data from database
+        const profile = await db.findUserById(user.id);
+        if (!profile?.username && event.url.pathname !== "/profile/setup") {
+            redirect(303, "/profile/setup");
+        }
+        return { user: profile };
+    } catch (err) {
+        if (isRedirect(err)) throw err;
+        winston.error("failed to load layout", { error: err });
+        error(500, "internal server error");
     }
-    return { vault, user: profile };
-  } catch (err) {
-    if (isRedirect(err)) throw err;
-    winston.error("failed to load layout", { error: err });
-    error(500, "internal server error");
-  }
 };

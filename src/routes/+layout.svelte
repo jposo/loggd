@@ -5,7 +5,6 @@
     import { onMount } from "svelte";
     import type { PageData } from "./$types";
     import { goto, invalidateAll } from "$app/navigation";
-    import { guessesState } from "$lib/state/guesses.svelte";
     import Toast from "$lib/components/Toast.svelte";
     import { toastManager } from "$lib/state/toasts.svelte";
     import { navigating } from "$app/state";
@@ -21,9 +20,8 @@
 
     let { children, data }: { children: any; data: PageData } = $props();
 
-    let vaultModal: HTMLDialogElement;
+    // let vaultModal: HTMLDialogElement;
     let searchModal: HTMLDialogElement;
-    let guesses = $derived(guessesState.value);
 
     let searchResults: SearchResult[] = $state([]);
     let isSearchOpen = $state(false);
@@ -94,7 +92,7 @@
 
 <svelte:head>
     <link rel="icon" href={favicon} />
-    <title>score.gd</title>
+    <title>loggd</title>
 </svelte:head>
 
 {#each toastManager.queue as toast (toast.id)}
@@ -106,7 +104,7 @@
         class="navbar bg-base-300/80 shadow-sm px-4 sticky top-0 z-10 backdrop-blur"
     >
         <div class="navbar-start gap-2">
-            <a href="/" class="btn btn-ghost text-2xl">score.gd</a>
+            <a href="/" class="btn btn-ghost text-2xl">loggd</a>
 
             <button class="btn btn-ghost" onclick={() => openSearch()}>
                 search...
@@ -114,7 +112,7 @@
         </div>
 
         <div class="navbar-end gap-1">
-            <div class="dropdown dropdown-hover">
+            <!-- <div class="dropdown dropdown-hover">
                 <div tabindex="0" role="button" class="btn btn-ghost">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -175,7 +173,7 @@
                         </button>
                     </li>
                 </ul>
-            </div>
+            </div> -->
             <a href="/levels" class="btn btn-ghost">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -241,7 +239,7 @@
         </div>
     </nav>
 
-    <dialog bind:this={vaultModal} class="modal backdrop-blur-sm">
+    <!-- <dialog bind:this={vaultModal} class="modal backdrop-blur-sm">
         <div class="modal-box w-11/12 max-w-5xl">
             <h3 class="text-lg font-bold">vault</h3>
             <p class="py-4">select one of the previous levels</p>
@@ -269,7 +267,7 @@
         <form method="dialog" class="modal-backdrop">
             <button>close</button>
         </form>
-    </dialog>
+    </dialog> -->
 
     <dialog
         bind:this={searchModal}
