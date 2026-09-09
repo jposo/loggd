@@ -3,7 +3,7 @@ import { requireAuth } from "$lib/server/auth/middleware";
 import db from "$lib/server/db/instance";
 import { fail } from "@sveltejs/kit";
 import { z } from "zod";
-import winston from "winston";
+import { logger } from "$lib/server/logger";
 
 const UpdateUser = z.object({
     bio: z.string().max(200).nullable(),
@@ -39,13 +39,13 @@ export const actions: Actions = {
                 return fail(500, { message: "failed to update profile" });
             }
 
-            winston.info("profile info updated", { user: updatedUser });
+            logger.info("profile info updated", { user: updatedUser });
             return {
                 success: true,
                 message: "profile updated successfully",
             };
         } catch (error) {
-            winston.error("profile update error", { error });
+            logger.error("profile update error", { error });
             return fail(500, { message: "internal server error" });
         }
     },

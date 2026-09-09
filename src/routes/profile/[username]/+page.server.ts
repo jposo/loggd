@@ -4,7 +4,7 @@ import db from "$lib/server/db/instance";
 import { get } from "$lib/server/gd/client";
 import { requireAuth } from "$lib/server/auth/middleware";
 import { z } from "zod";
-import winston from "winston";
+import { logger } from "$lib/server/logger";
 
 const UpdateList = z.object({
     activeList: z
@@ -198,7 +198,7 @@ export const actions: Actions = {
 
             return { success: true };
         } catch (err) {
-            winston.error("error updating list placement:", err);
+            logger.error("error updating list placement:", err);
             return fail(500, { message: "failed to update list placement" });
         }
     },

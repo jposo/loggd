@@ -3,7 +3,6 @@ import type { RequestHandler } from "./$types";
 import { get } from "$lib/server/gd/client";
 import SearchParams from "$lib/server/schemas/SearchParams";
 import db from "$lib/server/db/instance";
-import winston from "winston";
 import type { UserSearchResponse } from "$lib/server/gd/users";
 
 export const GET: RequestHandler = async ({ url }) => {

@@ -1,8 +1,7 @@
 import type { LayoutServerLoad } from "./$types";
 import { error, isRedirect, redirect } from "@sveltejs/kit";
 import db from "$lib/server/db/instance";
-import { getCurrentDay } from "$lib/server/utils";
-import winston from "winston";
+import { logger } from "$lib/server/logger";
 
 export const load: LayoutServerLoad = async (event) => {
     try {
@@ -22,7 +21,7 @@ export const load: LayoutServerLoad = async (event) => {
         return { user: profile };
     } catch (err) {
         if (isRedirect(err)) throw err;
-        winston.error("failed to load layout", { error: err });
+        logger.error("failed to load layout", { error: err });
         error(500, "internal server error");
     }
 };
