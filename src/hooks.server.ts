@@ -1,9 +1,6 @@
 import type { Handle } from "@sveltejs/kit";
 import { createServerClient } from "@supabase/ssr";
 import { env as penv } from "$env/dynamic/public";
-import winston from "winston";
-
-winston.add(new winston.transports.Console());
 
 export const handle: Handle = async ({ event, resolve }) => {
     event.locals.supabase = createServerClient(

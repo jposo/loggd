@@ -5,9 +5,9 @@ import { requireAuth, requireAuthWithRoles } from "$lib/server/auth/middleware";
 import { z } from "zod";
 import { get } from "$lib/server/gd/client";
 import type { InsertLevel, InsertProgress } from "$lib/server/db/schema";
-import winston from "winston";
 import ProgressUpdate from "$lib/server/schemas/ProgressUpdate";
 import { process } from "$lib/server/schemas/shared";
+import { logger } from "$lib/server/logger";
 
 const UpdateLevelForm = z.object({
     releaseDate: z.preprocess(
@@ -37,7 +37,7 @@ export const load: PageServerLoad = async ({
         }
         const search = await get("levels").search(id);
         if (!search) {
-            winston.warn("level not found", { id });
+            logger.warn("level not found", { id });
             error(404, "level not found");
         }
         const result = search.result[0];
@@ -71,7 +71,7 @@ export const load: PageServerLoad = async ({
         const userProgress = await db.findUserProgressByLevelId(user.id, id);
         return { level, progress: userProgress };
     } catch (err) {
-        winston.error("internal server error", { err });
+        logger.error("internal server error", { err });
         error(500, "internal server error");
     }
 };
@@ -134,12 +134,12 @@ export const actions: Actions = {
                     message: "sucessfully updated progress",
                 };
             } else {
-                winston.error("failed to update progress", { data, result });
+                logger.error("failed to update progress", { data, result });
                 return fail(422, { message: "failed to update progress" });
             }
         } catch (err) {
             if (isRedirect(err)) throw err;
-            winston.error("error updating user progress", { err });
+            logger.error("error updating user progress", { err });
             return fail(500, { message: "internal server error" });
         }
     },
@@ -172,16 +172,16 @@ export const actions: Actions = {
             const result = await db.updateLevel(data);
 
             if (result) {
-                winston.info(
+                logger.info(
                     `user ${user.username} (id:${user.id}) updated level ${levelId}`,
                 );
                 return { success: true, message: "sucessfully updated level" };
             } else {
-                winston.error("failed to update level", { data });
+                logger.error("failed to update level", { data });
                 return fail(422, { message: "failed to update level" });
             }
         } catch (err) {
-            winston.error("internal server error in 'updateLevel' action", {
+            logger.error("internal server error in 'updateLevel' action", {
                 err,
             });
             return fail(500, { message: "internal server error" });
@@ -205,7 +205,7 @@ export const actions: Actions = {
         try {
             const result = await db.hideReview(data.reviewId);
             if (result) {
-                winston.info(
+                logger.info(
                     `user ${user.username} (id:${user.id}) hid review ${data.reviewId}`,
                 );
                 return { success: true, message: "sucessfully hidden review" };
@@ -213,7 +213,7 @@ export const actions: Actions = {
                 return fail(422, { message: "failed to hide review" });
             }
         } catch (err) {
-            winston.error("internal server error in 'hideReview' action", {
+            logger.error("internal server error in 'hideReview' action", {
                 err,
             });
             return fail(500, { message: "internal server error" });

@@ -2,7 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import db from "$lib/server/db/instance";
 import { z } from "zod";
-import winston from "winston";
+import { logger } from "$lib/server/logger";
 
 const Setup = z.object({
     username: z
@@ -30,7 +30,6 @@ export const load: PageServerLoad = async (event) => {
 export const actions: Actions = {
     default: async (event) => {
         try {
-            // winston.info(event);
             const {
                 data: { user },
             } = await event.locals.supabase.auth.getUser();
@@ -57,19 +56,19 @@ export const actions: Actions = {
             });
 
             if (!user) {
-                winston.error("failed to set username", {
+                logger.error("failed to set username", {
                     username: profile.username,
                 });
                 return fail(500, { message: "failed to create account" });
             }
 
-            winston.info("username set successfully", {
+            logger.info("username set successfully", {
                 userId: profile.id,
                 username: profile.username,
             });
             return { success: true, message: "account created successfully" };
         } catch (err) {
-            winston.error("failed to create account", { error: err });
+            logger.error("failed to create account", { error: err });
             return fail(500, { message: "internal server error" });
         }
     },
