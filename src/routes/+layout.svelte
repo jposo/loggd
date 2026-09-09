@@ -94,7 +94,7 @@
 
 <svelte:head>
     <link rel="icon" href={favicon} />
-    <title>score.gd</title>
+    <title>loggd</title>
 </svelte:head>
 
 {#each toastManager.queue as toast (toast.id)}
@@ -106,7 +106,7 @@
         class="navbar bg-base-300/80 shadow-sm px-4 sticky top-0 z-10 backdrop-blur"
     >
         <div class="navbar-start gap-2">
-            <a href="/" class="btn btn-ghost text-2xl">score.gd</a>
+            <a href="/" class="btn btn-ghost text-2xl">loggd</a>
 
             <button class="btn btn-ghost" onclick={() => openSearch()}>
                 search...
