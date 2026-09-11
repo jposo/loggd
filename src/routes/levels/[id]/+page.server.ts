@@ -139,6 +139,7 @@ export const actions: Actions = {
             }
         } catch (err) {
             if (isRedirect(err)) throw err;
+            console.error("RAW error", err); // temp to check if deno deploy catches this
             logger.error("error updating user progress", { err });
             return fail(500, { message: "internal server error" });
         }
