@@ -129,7 +129,6 @@ export const actions: Actions = {
             const result = await db.upsertUserProgress(data);
 
             if (result) {
-                logger.info("sucessfully updated progress", { result });
                 return {
                     success: true,
                     message: "sucessfully updated progress",
